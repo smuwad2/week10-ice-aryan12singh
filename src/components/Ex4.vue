@@ -1,41 +1,44 @@
 <script>
-    export default {
-        data() {
-            return {
-                desc: '',
-                deadline: '',
-                taskList: []
-            }
+import TaskTracker from './subcomponents/TaskTracker.vue'
+
+export default {
+    components: {
+        TaskTracker
+    },
+    data() {
+        return {
+            tasks: []
+        }
+    },
+    methods: {
+        addTask(task) {
+            this.tasks.push({
+                id: Date.now(),
+                description: task.description,
+                deadline: task.deadline
+            });
         },
-        methods: {
-            add() {
-                this.taskList.push( { 'desc': this.desc, 'deadline': this.deadline } )
-                this.desc = ''
-                this.deadline = ''
-            },
-            // TODO: Add a new method, to delete a task completed
-            
+        removeTask(id) {
+            this.tasks = this.tasks.filter(t => t.id !== id);
         }
     }
-
+}
 </script>
 
 <template>
-    <div class="mb-3">
-        <label for="desc" class="form-label">Task</label>
-        <input type="text" class="form-control" id="desc" v-model='desc' placeholder="task">
+    <div>
+        <task-tracker @add-task="addTask"></task-tracker>
+        
+        <div class="mt-3">
+            <div v-for="task in tasks" :key="task.id" class="card mb-2" style="width: 18rem;">
+                <div class="card-body">
+                    <p class="card-text">{{ task.description }}</p>
+                    <small class="text-muted">Deadline: {{ task.deadline }}</small>
+                    <button class="btn btn-success" @click="removeTask(task.id)">Done</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="deadline" class="form-label">Deadline</label>
-        <input type="date" class="form-control" id="deadline" v-model='deadline' placeholder="deadline">
-    </div>
-
-    <button type="button" @click="add" class="btn btn-primary">Add New Task</button>
-    <hr>
-
-    <!-- TODO: Modify following code -->
-    <task-tracker ></task-tracker>
-
 </template>
 
 <style scoped>

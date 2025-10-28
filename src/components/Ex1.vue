@@ -1,12 +1,17 @@
 <script>
     //import component
-    import SoundIcon from './SoundIcon.vue'
+    import SoundIcon from './subcomponents/SoundIcon.vue'
+
+    const emojis = (SoundIcon && typeof SoundIcon.data === 'function')
+        ? SoundIcon.data().soundEmojis
+        : ['🔇','🔈','🔉','🔊']
     
     export default { 
         components: { SoundIcon },
         data() {
             return {
-                soundLevel: 0
+                soundLevel: 0,
+                soundEmojis: emojis
             }
         }
     }
@@ -14,11 +19,8 @@
 
 <template>
 
-    <div style="display:flex; align-items:center; gap:8px;">
     Sound level
     <input type="number" min="0" max="3" v-model.number="soundLevel"> 
     <!-- TODO: Add Code Here to make use of the component -->
-    <SoundIcon :level="soundLevel" />
-  </div>
+    <sound-icon :level="soundLevel"></sound-icon>
 </template>
-
